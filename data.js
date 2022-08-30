@@ -1,21 +1,15 @@
 const express = require("express");
-
 console.log("Hii..! , I'm  Logisha");
-
 const server = express();  // convert body to json(express.json) and keep it in a  body key in request  
-
 server.use(express.json())    // midllevar method
-
 var users = [];
-
 var users1=[
-   {id:'1',name: 'logisha' , dept: 'EEE', rank: 1, course: 'completed' },
-   {id:'2',name: 'Akshaya' , dept: 'ECE', rank: 3, course: 'completed' },
-   {id:'3',name: 'Dharani' , dept: 'EEE', rank: 11, course: 'completed' },
-   {id:'4',name: 'Ishu' , dept: 'IT', rank: 15, course: 'completed' },
-   {id:'5',name: 'Janani' , dept: 'EEE', rank: 6, course: 'completed' }
+   {id:'1',name: 'logisha' ,email:'logisha@gmail.com', dept: 'EEE', rank: 1, course: 'completed' },
+   {id:'2',name: 'Akshaya' ,email:'akshaya@gmail.com', dept: 'ECE', rank: 3, course: 'completed' },
+   {id:'3',name: 'Dharani' , email:'dharani@gmail.com',dept: 'EEE', rank: 11, course: 'completed' },
+   {id:'4',name: 'Ishwarya' ,email:'ishwarya@gmail.com', dept: 'IT', rank: 15, course: 'completed' },
+   {id:'5',name: 'Janani' ,email:'janani@gmail.com', dept: 'EEE', rank: 6, course: 'completed' }
 ]
-
 var emailValidator = (req, res, next) =>  {
      var userdata = req.body;
      if(userdata.email == undefined){
@@ -24,8 +18,6 @@ var emailValidator = (req, res, next) =>  {
      }
      next();
 };
-
-
 server.get("/hello",(req,res)=> {
    res.send("Hello welcomee!!");
 });
@@ -98,7 +90,18 @@ server.put('/:id', function (req, res) {
    }
 
 });
-
+server.use('/', (req, res, next) => {
+   var filters = req.query;
+   var filteredUsers = user1.filter(user => {
+     let isValid = true;
+     for (key in filters) {
+       console.log(key, user[key], filters[key]);
+       isValid = isValid && user[key] == filters[key];
+     }
+     return isValid;
+   });
+   res.send(filteredUsers);
+ });
 server.listen(4000, () => {
    console.log("server running on port :4000");
 });
